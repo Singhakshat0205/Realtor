@@ -1,7 +1,13 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc , serverTimestamp} from "firebase/firestore"; 
+import { db } from '../firebase';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 const SignUp = () => {
      
    const [showPassword, setShowPassword]= useState(false);
@@ -11,12 +17,48 @@ const SignUp = () => {
         email: "",
         password:""
     });
+
+    const navigate= useNavigate();
    
     const onInputChange=(e)=>{
        setFormData({...formData,
         [e.target.id] :e.target.value
         });
     }
+    
+    const {name,email, password}= formData;
+    const onSubmit= async(e)=>{
+       e.preventDefault();
+         try {
+            if(!name.length){
+                
+                toast.error('Missing name');
+                return;
+            }
+             
+            const auth= getAuth();
+            const userCredentials= await createUserWithEmailAndPassword(auth, email,password);
+            
+            updateProfile(auth.currentUser, {
+                displayName:name
+            })
+
+            const user= userCredentials.user;
+            const formDataCopy= {...formData};
+            delete formDataCopy.password;
+            formDataCopy.timestamp= serverTimestamp()
+
+           
+           await setDoc(doc(db,"users", user.uid), formDataCopy);
+             toast.success('Registered Successfully');
+             navigate("/")
+         } catch (error) {
+            console.log(error);
+            const errorMsg= error.message.split('auth/')[1].replace(/[().]/g, '');
+            toast.error(errorMsg);
+         }
+    }
+    
 
   return (
     <section>
@@ -27,7 +69,7 @@ const SignUp = () => {
                 <img  src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357" alt="sign-in-photo" className='w-full rounded-2xl'/>
             </div>
             <div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-                <form>
+                <form onSubmit={onSubmit}>
                 <input className='w-full px-4 py-2 text-xl text-gray-700 bg-white mb-8 border-gray-300 rounded-md transition ease-in-out' 
                     id="name"
                     type='text'  

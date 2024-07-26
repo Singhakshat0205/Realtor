@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 
 const ForgotPassword = () => {
-     
+      
  
 
     const [email, setEmail]= useState("");
