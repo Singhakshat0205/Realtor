@@ -2,6 +2,11 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 const SignIn = () => {
      
    const [showPassword, setShowPassword]= useState(true);
@@ -10,11 +15,32 @@ const SignIn = () => {
         email: "",
         password:""
     });
+    
+    const navigate= useNavigate();
+
+    const {email, password}= formData;
    
     const onInputChange=(e)=>{
        setFormData({...formData,
         [e.target.id] :e.target.value
         });
+    }
+
+    const handleSubmit=async (e)=>{
+           e.preventDefault();
+        try {
+            const auth= getAuth();
+            const userCredentials= await signInWithEmailAndPassword(auth, email, password);
+
+            if(userCredentials.user){
+                navigate('/');
+                toast.success('signed-in successfully');
+            }
+
+        } catch (error) {
+          toast.error('Wrong Credentials');
+        }
+
     }
 
   return (
@@ -26,7 +52,7 @@ const SignIn = () => {
                 <img  src="https://images.unsplash.com/flagged/photo-1564767609342-620cb19b2357" alt="sign-in-photo" className='w-full rounded-2xl'/>
             </div>
             <div className='w-full md:w-[67%] lg:w-[40%] lg:ml-20'>
-                <form>
+                <form onSubmit={handleSubmit}>
                     <input className='w-full px-4 py-2 text-xl text-gray-700 bg-white mb-8 border-gray-300 rounded-md transition ease-in-out' 
                     id="email"
                     type='email'  
