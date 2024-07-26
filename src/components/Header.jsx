@@ -1,6 +1,7 @@
 import React from 'react'
 import '../index.css'
 import { useLocation } from 'react-router'
+
 import { useNavigate } from 'react-router'
 const Header = () => {
 
@@ -8,7 +9,7 @@ const Header = () => {
     
    
     const location= useLocation();
-    console.log(location);
+
     const navigate= useNavigate();
     const pathMatchRoute=(route)=>{
         if(route===location.pathname){return true;}

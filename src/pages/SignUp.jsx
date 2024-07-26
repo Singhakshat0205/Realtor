@@ -30,11 +30,7 @@ const SignUp = () => {
     const onSubmit= async(e)=>{
        e.preventDefault();
          try {
-            if(!name.length){
-                
-                toast.error('Missing name');
-                return;
-            }
+          
              
             const auth= getAuth();
             const userCredentials= await createUserWithEmailAndPassword(auth, email,password);
