@@ -38,7 +38,7 @@ const Header = () => {
                     <li className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px]  ${pathMatchRoute("/offers") && "border-b-red-600 text-black"}`} onClick={()=>{navigate("/offers")}}>Offers</li>
                     <li 
                     className={`cursor-pointer py-3 text-sm font-semibold text-gray-400 border-b-[3px]  ${
-                    (pathMatchRoute("/sign-in") || pathMatchRoute("/sign-in")) && "border-b-red-600 text-black"}`} onClick={()=>{navigate("/profile")}}>
+                    (pathMatchRoute("/sign-in") || pathMatchRoute("/profile")) && "border-b-red-600 text-black"}`} onClick={()=>{navigate("/profile")}}>
                         {pageState}
                     </li>
                 </ul>

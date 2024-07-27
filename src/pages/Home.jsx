@@ -1,7 +1,8 @@
 import React from 'react'
-
+import Spinner from '../components/Spinner'
 const Home = () => {
-  return (
+
+  return  (
     <div>Home</div>
   )
 }
