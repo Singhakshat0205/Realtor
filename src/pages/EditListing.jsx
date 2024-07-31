@@ -1,24 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { getAuth, prodErrorMap } from 'firebase/auth';
 import { v4 as uuidv4 } from 'uuid';
-import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { doc } from 'firebase/firestore';
 
 
-
-const CreateListing = () => {
+const EditListing = () => {
 
   const navigate= useNavigate();
 
-  const api_key=process.env.RAPID_API_KEY;
+
  
   const auth= getAuth();
-
+  
+  const [listing, setListing]= useState(null);
   const [geolocationEnabled , setGeolocationEnabled ]= useState(true);
   const [loading, setLoading]= useState(false);
 
@@ -55,6 +56,43 @@ const CreateListing = () => {
         images
 
     }= formData
+
+    const params= useParams();
+
+
+    useEffect(()=>{
+        if(listing && listing.userRef !== auth.currentUser.uid){
+            toast.error("Unauthorized Access");
+            navigate("/");
+        }
+    },[auth.currentUser.uid, navigate, listing])
+
+    useEffect(()=>{
+    setLoading(true);
+    const fetchListing=async ()=>{
+        const docRef= doc(db, "listings", params.listingId )
+        const docSnap= await getDoc(docRef);
+    
+        console.log(docSnap);
+        
+        if(docSnap.exists && docSnap._document!==null){
+            setListing(docSnap.data());
+            setFormData({...docSnap.data()});
+            setLoading(false);
+        }
+        else{
+            setLoading(false);
+            navigate("/")
+            toast.error("Listing not found");
+
+        }
+    }
+
+    fetchListing();
+
+    },[navigate, params.listingId]);
+
+ 
 
     const onChange= (e)=>{
         
@@ -205,9 +243,10 @@ const CreateListing = () => {
       delete formDataCopy.longitude;
 
       
-      const docRef= await addDoc(collection(db , "listings"),formDataCopy);
+      const docRef= doc(db , "listings", params.listingId);
+      await updateDoc(docRef, formDataCopy);
       setLoading(false);
-      toast.success("Listing Created");
+      toast.success("Listing Updated");
       navigate(`/category/${formDataCopy.type}/${docRef.id}`)
         
     }
@@ -220,7 +259,7 @@ const CreateListing = () => {
   return (
    <main className="max-w-md px-2 mx-auto">
     <h1 className='text-3xl text-center mt-6 font-bold '>
-        Create a Listing
+        Update Listing
     </h1>
     
     <form onSubmit={onSubmit}>
@@ -485,7 +524,7 @@ const CreateListing = () => {
         </div>
 
         <button type='submit' className='w-full mb-6 px-7 py-3 bg-blue-600 text-white font-medium text-sm  uppercase rounded shadow -md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'>
-         Create Listing
+         Update Listing
         </button>
 
     </form>
@@ -496,4 +535,4 @@ const CreateListing = () => {
   )
 }
 
-export default CreateListing
+export default EditListing
