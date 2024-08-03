@@ -19,7 +19,7 @@ const Profile = () => {
    const [listings, setListings]= useState(null);
    const [loading, setLoading]= useState(true);
     const [changeDetail, setChangeDetail]= useState(false);
-  const [formData, setFormData]= useState({
+    const [formData, setFormData]= useState({
     name:auth.currentUser.displayName,
     email:auth.currentUser.email
   })
