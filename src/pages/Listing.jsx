@@ -138,40 +138,38 @@ const Listing = () => {
            />
             {address}
             </p>
-            <button className='cursor-default bg-red-700 text-white py-1 px-20 text-xl rounded-lg'>
+            <button className='cursor-default bg-red-700 text-white py-1 px-20 text-md rounded-lg'>
                For {type==="rent"? "Rent":"Sale"}
             </button>
 
-            <p className='mt-4 text-xl flex font-medium '>
-             <p className='mr-1 font-bold'> Description </p> {" - " + description}
-            </p>
-            <p className='flex mt-4 gap-10 pl-1 text-lg font-semibold'>
- 
-              <p className='flex items-center '>
-                <FaBed  className='mr-1'/>
-                {bedrooms} Bed
-              </p>  
-              <p className='flex items-center'>
-                <FaBath className='mr-1'/>
-                {bathrooms} Bath
-              </p>
-              <p className='flex items-center'>
-                <FaParking className='mr-1'/>
-                {parking ? "Parking available":"No parking"}
-              </p>
-              <p className='flex items-center'>
-                <FaChair className='mr-1'/>
-                {furbished ?"Furbished":"Not furbished"}
-              </p>
-
-                
-            </p>
+            <p className="mt-3 mb-3">
+            <span className="font-semibold">Description - </span>
+            {listing.description}
+          </p>
+            <ul className="flex items-center space-x-2 sm:space-x-10 text-sm font-semibold mb-6">
+            <li className="flex items-center whitespace-nowrap">
+              <FaBed className="text-lg mr-1" />
+              {+listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
+            </li>
+            <li className="flex items-center whitespace-nowrap">
+              <FaBath className="text-lg mr-1" />
+              {+listing.bathrooms > 1 ? `${listing.bathrooms} Baths` : "1 Bath"}
+            </li>
+            <li className="flex items-center whitespace-nowrap">
+              <FaParking className="text-lg mr-1" />
+              {listing.parking ? "Parking spot" : "No parking"}
+            </li>
+            <li className="flex items-center whitespace-nowrap">
+              <FaChair className="text-lg mr-1" />
+              {listing.furnished ? "Furnished" : "Not furnished"}
+            </li>
+          </ul>
 
             {listing.userRef !== auth.currentUser?.uid && !contactLandlord && (
             <div className="mt-6">
               <button
                 onClick={() => setContactLandlord(true)}
-                className="px-7 py-3 bg-blue-600 text-white font-medium text-md uppercase rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out "
+                className="px-7 py-2 bg-blue-600 text-white font-medium text-md uppercase rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out "
               >
                 Contact Landlord
               </button>
