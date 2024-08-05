@@ -90,9 +90,10 @@ const Listing = () => {
         {listing.imgUrls.map((url, index) => (
             
           <SwiperSlide key={index}>
-         
+                    
+
            <div
-            // style={{ background: `url(${imageUrl})  center, no-repeat`, backgroundSize: "cover", }} 
+            
 
          className="relative w-full h-[430px] overflow-hidden" >
    
