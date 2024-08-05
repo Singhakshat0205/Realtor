@@ -101,6 +101,7 @@ const Home = () => {
           slidesPerView={4}
           spaceBetween={30}
           freeMode={true}
+          
           pagination={{ clickable: true }}
           modules={[FreeMode, Pagination]}
           breakpoints={{

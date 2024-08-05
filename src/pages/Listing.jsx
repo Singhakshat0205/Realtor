@@ -5,7 +5,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { MdLocationOn } from "react-icons/md";
 import Spinner from '../components/Spinner';
 import { toast } from 'react-toastify';
-import { EffectFade ,Navigation, Autoplay} from 'swiper/modules';
+import { Navigation, Autoplay ,Pagination} from 'swiper/modules';
 import { FaBed } from "react-icons/fa";
 import { FaBath } from "react-icons/fa";
 import { FaParking } from "react-icons/fa";
@@ -64,7 +64,7 @@ const Listing = () => {
 
     const {address, bathrooms, bedrooms, description,name, parking, furbished, regularPrice, type ,offer, discountedPrice, userRef}= listing;
 
-    listing.email= auth.currentUser.email;
+    // listing.email= auth.currentUser.email;
    
   
    
@@ -75,12 +75,17 @@ const Listing = () => {
     
   
         <Swiper
-        slidesPerView={1}
-        navigation
-        pagination={{ type: "progressbar" }}
-        effect="fade"
-        modules={[Navigation, EffectFade, Autoplay]}
-        autoplay={{ delay: 3000 }}
+        spaceBetween={30}
+        centeredSlides={true}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Autoplay, Pagination, Navigation]}
       >
         {listing.imgUrls.map((url, index) => (
             

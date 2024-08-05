@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 export default function Slider() {
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
- 
+  
   const navigate = useNavigate();
   useEffect(() => {
     async function fetchListings() {
@@ -27,6 +27,7 @@ export default function Slider() {
         return listings.push({
           id: doc.id,
           data: doc.data(),
+          
         });
       });
       setListings(listings);
@@ -41,15 +42,22 @@ export default function Slider() {
     return <></>;
   }
   return (
-    listings && (
+     (
+      
       <>
+      {console.log(listings)}
         <Swiper
-          slidesPerView={1}
-          navigation
-          pagination={{ type: "progressbar" }}
-          effect="fade"
-          modules={[EffectFade]}
-          autoplay={{ delay: 3000 }}
+       spaceBetween={30}
+        centeredSlides={true}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Autoplay, Pagination, Navigation]}
         >
           {listings.map(({ data, id }) => (
             <SwiperSlide
@@ -57,6 +65,7 @@ export default function Slider() {
               onClick={() => navigate(`/category/${data.type}/${id}`)}
             >
               <div
+              
                 style={{
                   background: `url(${data.imgUrls[0]}) center, no-repeat`,
                   backgroundSize: "cover",
